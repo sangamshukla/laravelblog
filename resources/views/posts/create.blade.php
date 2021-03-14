@@ -1,6 +1,9 @@
 @extends('posts.app')
-<form action="/posts" method="post">
+<form action="/posts" method="post" enctype="multipart/form-data">
     @csrf
+    <div>
+        <input type="file" name="image" id="image">
+    </div>
     <div>
         <input type="text" name="title" id="title">
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Comment;
+use Illuminate\Auth\Events\Validated;
 
 
 class PostsController extends Controller
@@ -43,9 +45,17 @@ class PostsController extends Controller
         // $postdata->title = $request->input('title');
         // $postdata->description = $request->input('description');
         // $postdata->save();
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'required|mimes:png,jpg,jpeg|max:5048'
+        ]);
+        $imagePath = time() . $request->name . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $imagePath);
         $postdata = Post::create([
             'title' => $request->input('title'),
-            'description' => $request->input('description')
+            'description' => $request->input('description'),
+            'image_path' => $imagePath
         ]);
         return redirect('/posts');
     }
@@ -83,10 +93,24 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // $postdata = Post::where('id', $id)
+        //     ->update([
+        //         'title' => $request->input('title'),
+        //         'description' => $request->input('description')
+        //     ]);
+        // return redirect('/posts');
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'required|mimes:png,jpg,jpeg|max:5048'
+        ]);
+        $imagePath = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $imagePath);
         $postdata = Post::where('id', $id)
             ->update([
                 'title' => $request->input('title'),
-                'description' => $request->input('description')
+                'description' => $request->input('description'),
+                'image_path' => $imagePath
             ]);
         return redirect('/posts');
     }

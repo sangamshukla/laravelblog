@@ -3,6 +3,7 @@
 
     @foreach ($data as $item)
     <div>
+        <div><img src="{{asset('images/'.$item->image_path)}}" alt=""></div>
         <div><h1>{{ $item->title }}</h1></div>
         <div><p>{{ $item->description}}</p></div>
         <div><a href="/posts/{{$item->id}}/edit">Edit</a></div>
